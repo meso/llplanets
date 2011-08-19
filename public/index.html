@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>LL Planets</title>
+<link rel="stylesheet" href="stylesheets/common.css">
+<script src="javascripts/jquery.js"></script>
+<script src="javascripts/jquery.presentation.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+  var socket = io.connect('http://sakura.mesolabs.com:3010/slide');
+  socket.on('count', function(data) {
+    console.log(data);
+    if (data.count) {
+      $('#count').text(data.count);
+    }
+  });
+</script>
+</head>
+<body>
+  <div class="mod-url">http://llplanets.mesolabs.com/</div>
+  
+  <div class="mod-page top">
+    <div>
+      <h1>10分でわかる<br />Node.js</h1>
+      <br /><br /><br />
+      <h2>Node.js日本ユーザグループ</h2>
+      <h2>清水 俊博</h2>
+    </div>
+  </div>
+ 
+  <div class="mod-page plain">
+    <div>
+      <h2>自己紹介</h2>
+      <h3>氏名</h3>
+      <ul>
+        <li>清水 俊博</li>
+      </ul>
+      <h3>所属</h3>
+      <ul>
+        <li>株式会社ドワンゴ</li>
+        <li><a href="http://nodejs.jp">Node.js 日本ユーザグループ</a> 代表</li>
+        <li>java-ja</li>
+        <li>etc...</li>
+      </ul>
+      <h3>SocialMedia</h3>
+      <ul>
+        <li>Twitter: <a href="http://twitter.com/meso">@meso</a></li>
+        <li>Hatena: <a href="http://d.hatena.ne.jp/t_43z">id:t_43z</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mod-page shout">
+    <div>
+      <p>Node.jsとは何か</p>
+    </div>
+  </div>
+
+  <div class="mod-page plain">
+    <div>
+      <h2>ggrks</h2>
+      <p><a href="http://twitter.com/bad_at_math">@bad_at_math</a>の<a href="http://d.hatena.ne.jp/badatmath/20101020/1287587240">ブログエントリ</a>を読むべし</p>
+      <br />
+      <h3>ポイントは以下の3点</h3>
+      <ul>
+        <li>「Ryan Dahlの目指したもの」</li>
+        <li>「なぜそれを目指したのか」</li>
+        <li>「それをどのように実現したか」</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mod-page plain">
+    <div>
+      <h2>Ryan Dahlの目指したもの</h2>
+      <ul>
+        <li>Node's goal is to provide <span class="emp">an easy way</span> to build scalable network programs.</li>
+        <li>Nodeの目的は、スケーラブルなネットワークプログラムを作成する<span class="emp">簡単な方法</span>を提供することです</li>
+      </ul>
+      <h3>なぜこれを目指す必要があったのか</h3>
+      <ul><li>解決すべき<span class="emp">問題</span>があったから</li></ul>
+    </div>
+  </div>
+
+  <div class="mod-page plain">
+    <div>
+      <h2>解決すべき問題</h2>
+      <ul>
+        <li>C10K問題
+        <p>- ハードウェアの性能に関わらず、<span class="emp">同時接続</span>するクライアント数に限界がきてしまう問題<br />
+        - 原因は複合的だが、主な原因の1つは<span class="emp">スレッド数</span>の増大<br />
+        - Ajax/Cometが出てきて注目された</p>
+        </li>
+      </ul>
+      <h2>どうやって解決したか</h2>
+      <ul>
+        <li>イベントループとノンブロッキングI/O</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mod-page plain">
+    <div>
+      <h2>イベントループモデル</h2>
+      <ul>
+        <li>1つのスレッドが<span class="emp">イベントの発生</span>を待機</li>
+        <li>イベントが発生したらそのイベントに即した処理を行う</li>
+        <li>重い処理を行う際には「<span class="emp">その処理の結果が返ってきたら行う処理</span>」を登録する</li>
+        <li>重い処理の結果が返ってくるのをその場で待ち続けはしない</li>
+        <li>シングルスレッドでも複数の同時リクエストをさばける</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mod-page center">
+    <div>
+      <img src="images/pict01.png" width="500" height="500" />
+    </div>
+  </div>
+
+  <div class="mod-page plain">
+    <div>
+      <h2>問題点</h2>
+      <ul>
+        <li><span class="emp">1ヵ所</span>でも重い処理を待つコードがあれば、シングルスレッドゆえに<span class="emp">全体</span>の性能が低下する</li>
+        <li>CPUにとっての重い処理<br />
+        = ディスクやネットワークのI/O待ち</li>
+      </ul>
+      <table>
+        <tr><th style="text-align: center;">種別</th><th style="text-align: center;">サイクル</th><th style="text-align: center;">メートル換算</th></tr>
+        <tr><td>CPU L1キャッシュ</td><td style="text-align: right;">3</td><td style="text-align: right;">3m</td></tr>
+        <tr><td>CPU L2キャッシュ</td><td style="text-align: right;">14</td><td style="text-align: right;">14m</td></tr>
+        <tr><td>メモリ</td><td style="text-align: right;">250</td><td style="text-align: right;">250m</td></tr>
+        <tr><td>ディスク</td><td style="text-align: right;">41,000,000</td><td style="text-align: right;">地球1周</td></tr>
+        <tr><td>ネットワーク</td><td style="text-align: right">240,000,000</td><td style="text-align: right;">地球6周</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="mod-page plain">
+    <div>
+      <h2>ノンブロッキングI/O</h2>
+      <ul>
+        <li>プログラマが見極めるんじゃなくて<span class="emp">強制的</span>にI/Oを非同期にしてしまおう</li>
+        <li>libev, libeioといったライブラリによって実現<br />
+        Windowsとの差分も抽象化する<span class="emp">libuv</span>を開発中</li>
+        <li>結果、I/O待ちによって<span class="emp">ブロックされることがない</span>ため性能が低下しない</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="mod-page plain">
+    <div>
+      <h2>コード例</h2>
+     - ブロックするAPI
+      <pre style="font-size: 24px;">
+var user = db.exec('select * from user where id=123');
+// 結果をここで待つ
+display(user.name);
+      </pre>
+      - ノンブロッキングなAPI
+      <pre style="font-size: 24px;">
+db.exec('select * from user where id=123', function(user) {
+  // 結果を受け取ったらここが呼ばれる
+  display(user.name);
+});
+// 結果を待たずにここにくる
+      </pre>
+    </div>
+  </div>
+
+  <div class="mod-page shout">
+    <div>
+      <p>Because nothing blocks, <span class="emp">less-than-expert</span> programmers are able to develop fast systems.</p>
+    </div>
+  </div>
+
+  <div class="mod-page shout">
+    <div>
+      <p>このようなプラットフォームをどの言語向けに提供すべきか</p>
+    </div>
+  </div>
+  
+  <div class="mod-page plain">
+    <div>
+      <h2>JavaScript</h2>
+      <ul>
+        <li>よく知られた言語である</li>
+        <li>シングルスレッドモデルである</li>
+        <li>イベントループの仕組みが備わっている</li>
+        <li><span class="emp">無名関数</span>や<span class="emp">クロージャ</span>のような特性が備わっている</li>
+        <li>標準入出力の<span class="emp">仕様がない</span>
+        <p>既存のI/Oライブラリが存在しないため、0から<span class="emp">すべてがノンブロッキングな世界</span>を作り上げることができる</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="mod-page plain">
+    <div>
+      <h2>JavaScriptにした恩恵</h2>
+      <ul>
+        <li>ブラウザ競争のおかげで<span class="emp">V8 Engine</span>が爆速</li>
+        <li>ユーザベースが大きい</li>
+        <li>新たな言語を覚えなくていい</li>
+        <li>開発環境やツールが整備されている</li>
+        <li>大きなイベントがある(<span class="emp">jsconf</span>)</li>
+        <li><span class="emp">JSON</span>を扱えるデータストアと親和性が高い</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="mod-page shout">
+    <div>
+      <p>Node.jsをどう使うべきか</p>
+    </div>
+  </div>
+  
+  <div class="mod-page plain">
+    <div>
+      <h2>適した分野</h2>
+      <ul>
+        <li><span class="emp">リアルタイム</span>Webアプリケーション
+        <p>チャット, ゲーム, コラボレーションツール, Streaming, etc...</p>
+        </li>
+        <li>クローラー
+        <p>ページを取得したら、「リンクを抽出してリンク先のページを取得する」関数を<span class="emp">再帰的</span>に<span class="emp">非同期</span>に呼び出す</p>
+        </li>
+        <li>スクレイピング
+        <p><span class="emp">jQuery</span>などのJSライブラリを使えるので、スクレイピングが楽チン</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mod-page plain">
+    <div>
+      <h2>事例</h2>
+      <ul>
+        <li><span class="emp">Github</span>のファイルダウンロードサーバ</li>
+        <li>HPのwebOS（<span class="emp">死亡確認</span>）</li>
+        <li>Yammerの外部API用のプロキシサーバ</li>
+        <li><span class="emp">jQuery</span>のビルドシステム</li>
+        <li><span class="emp">CoffeeScript</span>のコンパイラ</li>
+        <li>DeNAのゲームSDKである<span class="emp">ngCore</span>に含まれている配信サーバ</li>
+        <li>サイバーエージェントの<span class="emp">ピグライフ</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mod-page shout">
+    <div>
+      <p>ありがとう</p>
+      <p>ございました</p>
+    </div>
+  </div>
+
+
+<hr />
+
+<ul class="mod-pager" id="pager"> <li id="pager-L"><a href="#">L</a></li> <li id="pager-R"><a href="#">R</a></li> </ul>
+<p class="mod-pageNum" id="pageNum"> <span class="current" id="pageNum-current">0</span> / <span class="total" id="pageNum-total">0</span> </p>
+<div class="mod-viewer" id="viewer">閲覧者数: <span id="count">0</span> 人</div>
+
+</body>
+</html>
