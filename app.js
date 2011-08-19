@@ -11,7 +11,7 @@ var app = module.exports = express.createServer();
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
+  app.set('view engine', 'ejs');
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
@@ -24,6 +24,12 @@ app.configure('development', function(){
 
 app.configure('production', function(){
   app.use(express.errorHandler()); 
+});
+
+app.get('/', function(req, res) {
+  res.render('index', {
+    title: "LL Planets"
+  });
 });
 
 app.listen(3010);
@@ -40,6 +46,7 @@ var slide = io.of('/slide').on('connection', function(socket) {
     slide.emit('count', {count: slideCount});
   });
 });
+
 
 process.on('uncaughtException', function(err) {
   console.log(err.toString());
