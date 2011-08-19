@@ -15,15 +15,6 @@
         $('#count').text(data.count);
       }
     });
-    var tweet = io.connect('http://localhost:3010/tweet');
-    tweet.on('tweet', function(data) {
-      console.log(data);
-      if (data.tweet) {
-        scroll(data.tweet);
-      }
-    });
-    function scroll(str) {
-    }
   </script>
 </head>
 <body>
